@@ -1,46 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:peliculas/src/models/peliculas_model.dart';
 
 class CardSwiper extends StatelessWidget {
   final List<Pelicula> peliculas;
 
-  CardSwiper({@required this.peliculas});
+  CardSwiper({required this.peliculas});
 
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
 
-    return Container(
-      padding: EdgeInsets.only(top: 10.0),
-      child: Swiper(
-        itemCount: peliculas.length,
-        itemWidth: _screenSize.width * 0.7,
-        itemHeight: _screenSize.height * 0.5,
-        layout: SwiperLayout.STACK,
+    // peliculas![index].uniqueId = '${peliculas![index].id}-tarjeta';
 
-        itemBuilder: (BuildContext context, int index) {
-          peliculas[index].uniqueId = '${peliculas[index].id}-tarjeta';
+    //() => Navigator.pushNamed(context, 'detalle',arguments: peliculas![index]),
+    return CarouselSlider.builder(
+        itemCount: this.peliculas.length,
+        itemBuilder: (context, index, realIndex) =>
+            FadePosterImage(pelicula: peliculas[index]),
+        options: CarouselOptions(
+            autoPlay: true, aspectRatio: 2.0, enlargeCenterPage: true));
+  }
+}
 
-          //print(peliculas[index].getPosterImg());
-          return GestureDetector(
-            onTap: () => Navigator.pushNamed(context, 'detalle',
-                arguments: peliculas[index]),
-            child: Hero(
-              tag: peliculas[index].uniqueId,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: FadeInImage(
-                    placeholder: AssetImage('assets/img/no-image.jpg'),
-                    image: NetworkImage(peliculas[index].getPosterImg()),
-                    fit: BoxFit.cover,
-                  )),
-            ),
-          );
-        },
-        // pagination: new SwiperPagination(), //Para ver los puntos (ubicacion)
-        //control: new SwiperControl(), // Las flechas
-      ),
+class FadePosterImage extends StatelessWidget {
+  const FadePosterImage({
+    Key? key,
+    required this.pelicula,
+  }) : super(key: key);
+
+  final pelicula;
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeInImage(
+      placeholder: AssetImage('assets/img/no-image.jpg'),
+      image: NetworkImage(pelicula.getPosterImg()),
+      fit: BoxFit.cover,
     );
   }
 }

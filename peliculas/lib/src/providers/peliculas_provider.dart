@@ -23,7 +23,7 @@ class PeliculasProvider {
       _popularesStreamController.stream;
 
   void disposeStrams() {
-    _popularesStreamController?.close();
+    _popularesStreamController.close();
   }
 
   Future<List<Pelicula>> _procesarRespuesta(Uri url) async {

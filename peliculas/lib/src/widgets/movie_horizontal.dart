@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:peliculas/src/models/peliculas_model.dart';
 
 class MovieHorizontal extends StatelessWidget {
-  final List<Pelicula> peliculas;
+  final List<Pelicula>? peliculas;
   final Function siguientePagina;
 
-  MovieHorizontal({@required this.peliculas, @required this.siguientePagina});
+  MovieHorizontal({required this.peliculas, required this.siguientePagina});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +27,9 @@ class MovieHorizontal extends StatelessWidget {
         pageSnapping: false,
         controller: _pageController,
         //children: _tarjetas(context),
-        itemCount: peliculas.length,
+        itemCount: peliculas!.length,
         itemBuilder: (context, i) {
-          return _tarjeta(context, peliculas[i]);
+          return _tarjeta(context, peliculas![i]);
         },
       ),
     );
@@ -58,7 +58,7 @@ class MovieHorizontal extends StatelessWidget {
             ),
           ),
           Text(
-            pelicula.title,
+            pelicula.title!,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.caption,
           )

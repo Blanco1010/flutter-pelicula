@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/src/models/peliculas_model.dart';
 import 'package:peliculas/src/providers/peliculas_provider.dart';
 import 'package:peliculas/src/search/search_delegate.dart';
 import 'package:peliculas/src/widgets/card_swiper_widget.dart';
@@ -35,10 +36,6 @@ class HomePage extends StatelessWidget {
               _swiperTarjetas(),
               SizedBox(height: 20),
               _footer(context),
-              SizedBox(height: 20),
-              _footer(context),
-              SizedBox(height: 20),
-              _footer(context),
             ],
           ),
         ),
@@ -49,9 +46,9 @@ class HomePage extends StatelessWidget {
   Widget _swiperTarjetas() {
     return FutureBuilder(
       future: peliculasProvider.getEnCines(),
-      builder: (context, AsyncSnapshot<List> snapshot) {
+      builder: (context, AsyncSnapshot<List<Pelicula>> snapshot) {
         if (snapshot.hasData) {
-          return CardSwiper(peliculas: snapshot.data);
+          return CardSwiper(peliculas: snapshot.data!);
         } else {
           return Container(
               padding: EdgeInsets.only(top: 200),
