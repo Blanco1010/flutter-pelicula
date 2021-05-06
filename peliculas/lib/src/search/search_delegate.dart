@@ -84,7 +84,6 @@ class DataSearch extends SearchDelegate {
               subtitle: Text(pelicula.originalTitle!),
               onTap: () {
                 close(context, null);
-                pelicula.uniqueId = '';
                 Navigator.pushNamed(context, 'detalle', arguments: pelicula);
               },
             );

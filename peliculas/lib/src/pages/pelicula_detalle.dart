@@ -6,7 +6,8 @@ import 'package:peliculas/src/providers/peliculas_provider.dart';
 class PeliculaDetalle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Pelicula pelicula = ModalRoute.of(context)!.settings.arguments as Pelicula;
+    final Pelicula pelicula =
+        ModalRoute.of(context)!.settings.arguments as Pelicula;
 
     return Scaffold(
         body: CustomScrollView(
@@ -39,11 +40,14 @@ class PeliculaDetalle extends StatelessWidget {
           pelicula.title!,
           style: TextStyle(color: Colors.white, fontSize: 16.0),
         ),
-        background: FadeInImage(
-          image: NetworkImage(pelicula.getBackgroundImg()),
-          placeholder: AssetImage('assets/img/no-image.jpg'),
-          fadeInDuration: Duration(milliseconds: 150),
-          fit: BoxFit.cover,
+        background: Hero(
+          tag: pelicula.uniqueIdBanner,
+          child: FadeInImage(
+            image: NetworkImage(pelicula.getBackgroundImg()),
+            placeholder: AssetImage('assets/img/no-image.jpg'),
+            fadeInDuration: Duration(milliseconds: 150),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

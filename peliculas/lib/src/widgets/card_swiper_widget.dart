@@ -33,10 +33,19 @@ class FadePosterImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeInImage(
-      placeholder: AssetImage('assets/img/no-image.jpg'),
-      image: NetworkImage(pelicula.getPosterImg()),
-      fit: BoxFit.cover,
+    // pelicula.uniqueId = '${pelicula.id}-banner';
+
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, 'detalle', arguments: pelicula),
+      child: Hero(
+        tag: pelicula.uniqueIdBanner,
+        child: FadeInImage(
+          placeholder: AssetImage('assets/img/no-image.jpg'),
+          // image: NetworkImage(pelicula.getPosterImg()),
+          image: NetworkImage(pelicula.getBackgroundImg()),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }

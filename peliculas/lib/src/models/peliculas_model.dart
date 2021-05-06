@@ -16,8 +16,6 @@ class Peliculas {
 }
 
 class Pelicula {
-  late String uniqueId;
-
   bool? adult;
   String? backdropPath;
   List<int>? genreIds;
@@ -65,6 +63,14 @@ class Pelicula {
     video = json['video'];
     voteAverage = json['vote_average'] / 1;
     voteCount = json['vote_count'];
+  }
+
+  get uniqueId {
+    return '$id-tarjeta';
+  }
+
+  get uniqueIdBanner {
+    return '$id-banner';
   }
 
   getPosterImg() {
