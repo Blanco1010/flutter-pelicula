@@ -23,8 +23,9 @@ class MovieHorizontal extends StatelessWidget {
 
     return Container(
       height: _screenSize.height * 0.2,
-      child: PageView.builder(
-        pageSnapping: false,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        // pageSnapping: false,
         controller: _pageController,
         //children: _tarjetas(context),
         itemCount: peliculas!.length,
@@ -39,7 +40,7 @@ class MovieHorizontal extends StatelessWidget {
     // pelicula.uniqueId = '${pelicula.id}-poster';
 
     final tarjeta = Container(
-      margin: EdgeInsets.only(right: 15.0),
+      margin: EdgeInsets.only(left: 15.0),
       child: Column(
         children: <Widget>[
           Expanded(
@@ -57,10 +58,14 @@ class MovieHorizontal extends StatelessWidget {
               ),
             ),
           ),
-          Text(
-            pelicula.title!,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.caption,
+          Container(
+            width: 120,
+            child: Text(
+              pelicula.title!,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.caption,
+            ),
           )
         ],
       ),
