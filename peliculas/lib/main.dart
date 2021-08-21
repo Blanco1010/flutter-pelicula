@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/src/routes/routes.dart';
 
-import 'package:peliculas/src/pages/home_page.dart';
-import 'package:peliculas/src/pages/pelicula_detalle.dart';
+import 'src/themes/theme.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,12 +10,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Peliculas',
-      initialRoute: '/',
-      routes: {
-        '/': (BuildContext context) => HomePage(),
-        'detalle': (BuildContext context) => PeliculaDetalle()
-      },
+      title: 'Movies',
+      initialRoute: 'home',
+      routes: routes,
+      theme: theme,
     );
   }
 }
