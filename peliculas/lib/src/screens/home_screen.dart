@@ -4,6 +4,7 @@ import 'package:peliculas/src/widgets/widgets.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Películas en cines'),
@@ -13,13 +14,18 @@ class HomeScreen extends StatelessWidget {
           IconButton(onPressed: () {}, icon: Icon(Icons.search_off_outlined))
         ],
       ),
-      body: Column(
-        children: [
-          // CardSwpier
-          CardSwiper(),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            // CardSwpier
+            CardSwiper(),
 
-          //List of movies.
-        ],
+            //List of movies.
+            SizedBox(height: size.height * 0.02),
+            MovieSlider(),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +18,8 @@ class CardSwiper extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              Navigator.push(context, _createRoute());
+              Navigator.pushNamed(context, 'details',
+                  arguments: 'movie-instance');
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
@@ -34,15 +33,5 @@ class CardSwiper extends StatelessWidget {
         },
       ),
     );
-  }
-
-  _createRoute() {
-
-    return PageRouteBuilder(pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation){})
-
-
-
-
-
   }
 }
