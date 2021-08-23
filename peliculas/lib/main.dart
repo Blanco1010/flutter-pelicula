@@ -18,7 +18,12 @@ class AppState extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => MoviesProvider())],
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => MoviesProvider(),
+          lazy: false, //create a instance
+        )
+      ],
       child: MyApp(),
     );
   }
