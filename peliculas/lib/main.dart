@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-import 'package:peliculas/src/routes/routes.dart';
 
+import 'package:peliculas/src/providers/movies_provider.dart';
+import 'package:peliculas/src/routes/routes.dart';
 import 'src/themes/theme.dart';
 
 void main() {
-  return runApp(MyApp());
+  return runApp(AppState());
 }
 
-class MyApp extends StatelessWidget {
+class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => MoviesProvider())],
+      child: MyApp(),
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies',
