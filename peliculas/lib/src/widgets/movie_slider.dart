@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/src/models/movie.dart';
 
 class MovieSlider extends StatelessWidget {
+  final List<Movie> movies;
+
+  const MovieSlider({required this.movies});
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    if (movies.length == 0) {
+      return Container(
+        width: double.infinity,
+        height: size.height * 0.5,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return Container(
       width: double.infinity,
@@ -20,11 +34,19 @@ class MovieSlider extends StatelessWidget {
           ),
           Flexible(
             child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: 20,
-                itemBuilder: (BuildContext context, int index) =>
-                    _MoviePoster()),
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: movies.length,
+              itemBuilder: (BuildContext context, int index) {
+                final String _url = movies[index].fullPosterImg;
+                final String _title = movies[index].title;
+
+                return _MoviePoster(
+                  title: _title,
+                  url: _url,
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -33,6 +55,11 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
+  final String title;
+  final String url;
+
+  const _MoviePoster({required this.title, required this.url});
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -51,7 +78,7 @@ class _MoviePoster extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               child: FadeInImage(
                 placeholder: AssetImage('assets/img/no-image.jpg'),
-                image: NetworkImage('https://via.placeholder.com/300x400'),
+                image: NetworkImage(url),
                 height: size.height * 0.25,
                 fit: BoxFit.cover,
               ),
@@ -59,7 +86,7 @@ class _MoviePoster extends StatelessWidget {
           ),
           SizedBox(height: size.height * 0.01),
           Text(
-            'Star Wars: El retorno del nuevo jedi Silvestre de Monte Cristo',
+            title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
