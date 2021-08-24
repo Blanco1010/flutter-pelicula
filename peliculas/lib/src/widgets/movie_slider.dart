@@ -3,8 +3,9 @@ import 'package:peliculas/src/models/movie.dart';
 
 class MovieSlider extends StatelessWidget {
   final List<Movie> movies;
+  final String title;
 
-  const MovieSlider({required this.movies});
+  const MovieSlider({required this.movies, required this.title});
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -28,7 +29,7 @@ class MovieSlider extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
             child: Text(
-              'Populares',
+              this.title,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
