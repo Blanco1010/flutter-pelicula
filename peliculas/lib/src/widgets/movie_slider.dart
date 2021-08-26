@@ -42,7 +42,6 @@ class _MovieSliderState extends State<MovieSlider> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -80,12 +79,8 @@ class _MovieSliderState extends State<MovieSlider> {
               scrollDirection: Axis.horizontal,
               itemCount: widget.movies.length,
               itemBuilder: (BuildContext context, int index) {
-                final String _url = widget.movies[index].fullPosterImg;
-                final String _title = widget.movies[index].title;
-
                 return _MoviePoster(
-                  title: _title,
-                  url: _url,
+                  movie: widget.movies[index],
                 );
               },
             ),
@@ -97,10 +92,9 @@ class _MovieSliderState extends State<MovieSlider> {
 }
 
 class _MoviePoster extends StatelessWidget {
-  final String title;
-  final String url;
+  final Movie movie;
 
-  const _MoviePoster({required this.title, required this.url});
+  const _MoviePoster({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -113,22 +107,21 @@ class _MoviePoster extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, 'details',
-                  arguments: 'movie-instance');
+              Navigator.pushNamed(context, 'details', arguments: movie);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               child: FadeInImage(
                 placeholder: AssetImage('assets/img/no-image.jpg'),
-                image: NetworkImage(url),
-                height: size.height * 0.25,
+                image: NetworkImage(movie.fullPosterImg),
+                height: size.height * 0.20,
                 fit: BoxFit.cover,
               ),
             ),
           ),
           SizedBox(height: size.height * 0.01),
           Text(
-            title,
+            movie.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

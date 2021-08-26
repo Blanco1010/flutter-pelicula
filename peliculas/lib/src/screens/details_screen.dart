@@ -1,22 +1,26 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+
+import 'package:palette_generator/palette_generator.dart';
+import 'package:peliculas/src/models/movie.dart';
 import 'package:peliculas/src/widgets/widgets.dart';
 
 class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //then change to an instance of movie
-
-    final String movie =
-        ModalRoute.of(context)?.settings.arguments.toString() ?? 'no-movie';
+    final Movie movie = ModalRoute.of(context)?.settings.arguments as Movie;
 
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: [
-          _CustomAppBar(),
+          _CustomAppBar(movie: movie),
           SliverList(
             delegate: SliverChildListDelegate([
-              _PosterAndTitle(),
+              _PosterAndTitle(movie: movie),
               _OverView(),
               _OverView(),
               _OverView(),
@@ -30,10 +34,61 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class _CustomAppBar extends StatelessWidget {
+  final Movie movie;
+
+  const _CustomAppBar({required this.movie});
   @override
   Widget build(BuildContext context) {
+// Calculate dominant color from ImageProvider
+
     final size = MediaQuery.of(context).size;
+
+    // return SliverAppBarWidget(
+    //   size: size,
+    //   movie: movie,
+    //   color: Colors.indigo,
+    // );
+
+    return FutureBuilder(
+      future: getImagePalette(movie.fullBackdropPath),
+      builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
+        Color color = Colors.indigo;
+        if (snapshot.hasData) {
+          color = snapshot.data!;
+        }
+
+        return SliverAppBarWidget(
+          size: size,
+          movie: movie,
+          color: color,
+        );
+      },
+    );
+  }
+
+  Future<Color> getImagePalette(imageProvider) async {
+    final PaletteGenerator paletteGenerator =
+        await PaletteGenerator.fromImageProvider(NetworkImage(imageProvider));
+    return paletteGenerator.dominantColor!.color;
+  }
+}
+
+class SliverAppBarWidget extends StatelessWidget {
+  const SliverAppBarWidget({
+    Key? key,
+    required this.size,
+    required this.movie,
+    required this.color,
+  }) : super(key: key);
+
+  final Size size;
+  final Movie movie;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
     return SliverAppBar(
+      backgroundColor: color,
       floating: false,
       pinned: true,
       expandedHeight: size.height * 0.25,
@@ -43,16 +98,21 @@ class _CustomAppBar extends StatelessWidget {
         title: Container(
           width: double.infinity,
           alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.only(bottom: size.height * 0.015),
+          padding: EdgeInsets.only(
+            bottom: size.height * 0.015,
+            right: size.width * 0.05,
+            left: size.width * 0.05,
+          ),
           color: Colors.black45,
           child: Text(
-            'movie.title',
-            style: TextStyle(fontSize: size.width * 0.07),
+            movie.title,
+            style: TextStyle(fontSize: size.width * 0.06),
+            textAlign: TextAlign.center,
           ),
         ),
         background: FadeInImage(
           placeholder: AssetImage('assets/gifs/loading.gif'),
-          image: NetworkImage('https://via.placeholder.com/500x300'),
+          image: NetworkImage(movie.fullBackdropPath),
           fit: BoxFit.cover,
         ),
       ),
@@ -61,6 +121,10 @@ class _CustomAppBar extends StatelessWidget {
 }
 
 class _PosterAndTitle extends StatelessWidget {
+  final Movie movie;
+
+  const _PosterAndTitle({required this.movie});
+
   @override
   Widget build(BuildContext context) {
     final TextTheme theme = Theme.of(context).textTheme;
@@ -76,41 +140,43 @@ class _PosterAndTitle extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(30)),
             child: FadeInImage(
               placeholder: AssetImage('assets/img/no-image.jpg'),
-              image: NetworkImage('https://via.placeholder.com/200x300'),
+              image: NetworkImage(movie.fullPosterImg),
               height: size.height * 0.3,
             ),
           ),
           SizedBox(width: size.width * 0.02),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'movie.title',
-                style: theme.headline5,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-              Text(
-                'movie.origialTitle',
-                style: theme.subtitle2,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.star_outline,
-                    size: size.height * 0.03,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(height: size.height * 0.05),
-                  Text(
-                    'movie.voteAverage',
-                    style: theme.caption,
-                  )
-                ],
-              )
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  movie.title,
+                  style: theme.headline5,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                Text(
+                  movie.originalTitle,
+                  style: theme.subtitle2,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.star_outline,
+                      size: size.height * 0.03,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    Text(
+                      movie.voteAverage.toString(),
+                      style: theme.caption,
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ],
       ),
