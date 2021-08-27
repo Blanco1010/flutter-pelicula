@@ -50,6 +50,8 @@ class _CustomAppBar extends StatelessWidget {
       color: Colors.indigo,
     );
 
+    // It's not so efficient to make this code
+
     // return FutureBuilder(
     //   future: getImagePalette(movie.fullBackdropPath),
     //   builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
