@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:peliculas/src/models/movie.dart';
+import 'package:peliculas/src/providers/movies_provider.dart';
+import 'package:provider/provider.dart';
 
 class MovieSlider extends StatefulWidget {
   final List<Movie> movies;
@@ -106,7 +108,10 @@ class _MoviePoster extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () {
+            onTap: () async {
+              final moviesProvider =
+                  Provider.of<ColorAppBar>(context, listen: false);
+              await moviesProvider.getColorFromImg(movie.fullBackdropPath);
               Navigator.pushNamed(context, 'details', arguments: movie);
             },
             child: ClipRRect(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:palette_generator/palette_generator.dart';
 import 'package:peliculas/src/models/model.dart';
 
 class MoviesProvider with ChangeNotifier {
@@ -44,6 +45,17 @@ class MoviesProvider with ChangeNotifier {
 
     final popularMoviesResponse = PopularMovieResponse.fromJson(jsonData);
     popularMovies = [...popularMovies, ...popularMoviesResponse.results];
+    notifyListeners();
+  }
+}
+
+class ColorAppBar with ChangeNotifier {
+  Color colorAppbar = Colors.indigo;
+
+  getColorFromImg(String imageProvider) async {
+    final PaletteGenerator paletteGenerator =
+        await PaletteGenerator.fromImageProvider(NetworkImage(imageProvider));
+    colorAppbar = paletteGenerator.dominantColor!.color;
     notifyListeners();
   }
 }

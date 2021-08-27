@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import 'package:palette_generator/palette_generator.dart';
 import 'package:peliculas/src/models/movie.dart';
+import 'package:peliculas/src/providers/movies_provider.dart';
 import 'package:peliculas/src/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class DetailsScreen extends StatelessWidget {
   @override
@@ -43,33 +44,27 @@ class _CustomAppBar extends StatelessWidget {
 
     final size = MediaQuery.of(context).size;
 
-    // return SliverAppBarWidget(
-    //   size: size,
-    //   movie: movie,
-    //   color: Colors.indigo,
-    // );
-
-    return FutureBuilder(
-      future: getImagePalette(movie.fullBackdropPath),
-      builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
-        Color color = Colors.indigo;
-        if (snapshot.hasData) {
-          color = snapshot.data!;
-        }
-
-        return SliverAppBarWidget(
-          size: size,
-          movie: movie,
-          color: color,
-        );
-      },
+    return SliverAppBarWidget(
+      size: size,
+      movie: movie,
+      color: Colors.indigo,
     );
-  }
 
-  Future<Color> getImagePalette(imageProvider) async {
-    final PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(NetworkImage(imageProvider));
-    return paletteGenerator.dominantColor!.color;
+    // return FutureBuilder(
+    //   future: getImagePalette(movie.fullBackdropPath),
+    //   builder: (BuildContext context, AsyncSnapshot<Color> snapshot) {
+    //     Color color = Colors.indigo;
+    //     if (snapshot.hasData) {
+    //       color = snapshot.data!;
+    //     }
+
+    //     return SliverAppBarWidget(
+    //       size: size,
+    //       movie: movie,
+    //       color: color,
+    //     );
+    //   },
+    // );
   }
 }
 
@@ -87,8 +82,11 @@ class SliverAppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final moviesProvider = Provider.of<ColorAppBar>(context, listen: false);
+    moviesProvider.getColorFromImg(movie.fullBackdropPath);
+
     return SliverAppBar(
-      backgroundColor: color,
+      backgroundColor: moviesProvider.colorAppbar,
       floating: false,
       pinned: true,
       expandedHeight: size.height * 0.25,

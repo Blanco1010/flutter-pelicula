@@ -19,10 +19,9 @@ class AppState extends StatelessWidget {
     ]);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => MoviesProvider(),
-          lazy: false, //create a instance
-        )
+        //create a instance
+        ChangeNotifierProvider(create: (_) => MoviesProvider(), lazy: false),
+        ChangeNotifierProvider(create: (_) => ColorAppBar()),
       ],
       child: MyApp(),
     );
