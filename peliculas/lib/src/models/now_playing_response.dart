@@ -1,10 +1,6 @@
-// To parse this JSON data, do
-//
-//     final paymentIntentResponse = paymentIntentResponseFromMap(jsonString);
-
 import 'dart:convert';
 
-import 'model.dart';
+import 'package:peliculas/src/models/movie.dart';
 
 class NowPlayingResponse {
   NowPlayingResponse({

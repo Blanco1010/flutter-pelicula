@@ -142,6 +142,8 @@ class _PosterAndTitle extends StatelessWidget {
               placeholder: AssetImage('assets/img/no-image.jpg'),
               image: NetworkImage(movie.fullPosterImg),
               height: size.height * 0.3,
+              width: size.width * 0.4,
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(width: size.width * 0.02),
