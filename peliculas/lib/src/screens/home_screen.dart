@@ -14,9 +14,7 @@ class HomeScreen extends StatelessWidget {
         title: Text('Películas en cines'),
         elevation: 0,
         centerTitle: true,
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search_off_outlined))
-        ],
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
