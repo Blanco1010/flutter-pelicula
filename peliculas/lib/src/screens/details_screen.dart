@@ -22,9 +22,7 @@ class DetailsScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               _PosterAndTitle(movie: movie),
-              _OverView(),
-              _OverView(),
-              _OverView(),
+              _OverView(description: movie.overview),
               CastingCards(),
             ]),
           ),
@@ -151,6 +149,10 @@ class _PosterAndTitle extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // ConstrainedBox(
+                //   constraints: BoxConstraints(),
+                //   child: Text(''),
+                // ),
                 Text(
                   movie.title,
                   style: theme.headline5,
@@ -187,6 +189,9 @@ class _PosterAndTitle extends StatelessWidget {
 }
 
 class _OverView extends StatelessWidget {
+  final String description;
+
+  const _OverView({required this.description});
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -196,7 +201,7 @@ class _OverView extends StatelessWidget {
         vertical: size.height * 0.02,
       ),
       child: Text(
-        'Laboris Lorem deserunt ut tempor irure mollit adipisicing mollit. Mollit ut ea aliqua anim. Dolore incididunt proident qui ullamco ad Lorem. Cillum adipisicing adipisicing et aliqua aute. Et exercitation amet velit id fugiat cupidatat et. Mollit excepteur adipisicing excepteur et enim qui.',
+        description,
         textAlign: TextAlign.justify,
         style: Theme.of(context).textTheme.subtitle1,
       ),
