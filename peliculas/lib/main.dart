@@ -12,6 +12,7 @@ void main() {
 
 class AppState extends StatelessWidget {
   @override
+  //lock orientation
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
