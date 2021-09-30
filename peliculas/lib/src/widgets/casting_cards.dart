@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CastingCards extends StatelessWidget {
+  final int movieId;
+
+  const CastingCards({required this.movieId});
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
