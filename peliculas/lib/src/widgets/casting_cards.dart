@@ -34,10 +34,14 @@ class CastingCards extends StatelessWidget {
           height: 200,
           // color: Colors.red,
           child: ListView.builder(
-            itemCount: 10,
+            itemCount: cast.length,
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            itemBuilder: (_, int index) => _CastCard(size: size),
+            itemBuilder: (_, int index) => _CastCard(
+              size: size,
+              name: cast[index].name,
+              profilePath: cast[index].fullProfilePath,
+            ),
           ),
         );
       },
@@ -46,9 +50,12 @@ class CastingCards extends StatelessWidget {
 }
 
 class _CastCard extends StatelessWidget {
-  const _CastCard({required this.size});
+  const _CastCard(
+      {required this.size, required this.name, required this.profilePath});
 
   final Size size;
+  final String name;
+  final String profilePath;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +70,8 @@ class _CastCard extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(20)),
             child: FadeInImage(
               placeholder: AssetImage('assets/gifs/loading.gif'),
-              image: NetworkImage('https://via.placeholder.com/150x300'),
+              image: NetworkImage(profilePath),
+              // image: NetworkImage('https://via.placeholder.com/150x300'),
               fit: BoxFit.cover,
               height: size.height * 0.18,
               width: size.width * 0.27,
@@ -71,7 +79,7 @@ class _CastCard extends StatelessWidget {
           ),
           SizedBox(height: size.height * 0.01),
           Text(
-            'actor.name askadd sakdd',
+            name,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
