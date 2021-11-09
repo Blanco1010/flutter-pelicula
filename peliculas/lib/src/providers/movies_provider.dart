@@ -17,6 +17,7 @@ class MoviesProvider with ChangeNotifier {
   int _popularPage = 0;
   int _upComingPage = 0;
 
+// When initializing, call some methods
   MoviesProvider() {
     print('MoviesProvider inicializado');
     this.getOnDisplayMovies();
