@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:peliculas/src/providers/movies_provider.dart';
+import 'package:peliculas/src/models/movie.dart';
 
 class MovieSearchDelegate extends SearchDelegate {
   final Size size;
@@ -32,23 +35,85 @@ class MovieSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Text('buildResults');
+    if (query.isEmpty) {
+      return SafeArea(child: _emptyContainer());
+    } else {
+      final moviesProvider =
+          Provider.of<MoviesProvider>(context, listen: false);
+
+      return FutureBuilder(
+        future: moviesProvider.searchMovie(query),
+        builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
+          if (!snapshot.hasData) return _emptyContainer();
+
+          final movies = snapshot.data;
+          return ListView.builder(
+              itemCount: movies!.length,
+              itemBuilder: (_, int index) => _MovieItem(movie: movies[index]));
+        },
+      );
+    }
+  }
+
+  Widget _emptyContainer() {
+    return Container(
+      child: Center(
+        child: Icon(
+          Icons.movie_creation_outlined,
+          size: 300,
+          color: Colors.black,
+        ),
+      ),
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     if (query.isEmpty) {
-      return SafeArea(
-        child: Center(
-          child: Icon(
-            Icons.movie_creation_outlined,
-            size: 300,
-            color: Colors.black,
-          ),
-        ),
-      );
+      return SafeArea(child: _emptyContainer());
     } else {
-      return Container();
+      final moviesProvider =
+          Provider.of<MoviesProvider>(context, listen: false);
+
+      return FutureBuilder(
+        future: moviesProvider.searchMovie(query),
+        builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
+          if (!snapshot.hasData) return _emptyContainer();
+
+          final movies = snapshot.data;
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            itemCount: movies!.length,
+            itemBuilder: (_, int index) => _MovieItem(movie: movies[index]),
+          );
+        },
+      );
     }
+  }
+}
+
+class _MovieItem extends StatelessWidget {
+  final Movie movie;
+
+  const _MovieItem({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return ListTile(
+      leading: FadeInImage(
+        placeholder: AssetImage('assets/img/no-image.jpg'),
+        image: NetworkImage(movie.fullPosterImg),
+        height: size.height * 0.2,
+        width: size.width * 0.2,
+        fit: BoxFit.fill,
+      ),
+      title: Text(movie.title),
+      subtitle: Text(movie.originalTitle),
+      onTap: () {
+        Navigator.pushNamed(context, 'details', arguments: movie);
+      },
+    );
   }
 }
