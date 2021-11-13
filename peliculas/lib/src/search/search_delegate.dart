@@ -101,13 +101,18 @@ class _MovieItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
+    movie.heroId = 'search-${movie.id}';
+
     return ListTile(
-      leading: FadeInImage(
-        placeholder: AssetImage('assets/img/no-image.jpg'),
-        image: NetworkImage(movie.fullPosterImg),
-        height: size.height * 0.2,
-        width: size.width * 0.2,
-        fit: BoxFit.fill,
+      leading: Hero(
+        tag: movie.heroId!,
+        child: FadeInImage(
+          placeholder: AssetImage('assets/img/no-image.jpg'),
+          image: NetworkImage(movie.fullPosterImg),
+          height: size.height * 0.2,
+          width: size.width * 0.2,
+          fit: BoxFit.fill,
+        ),
       ),
       title: Text(movie.title),
       subtitle: Text(movie.originalTitle),

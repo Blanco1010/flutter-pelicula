@@ -33,6 +33,8 @@ class Movie {
   double voteAverage;
   int voteCount;
 
+  String? heroId;
+
   String get fullPosterImg {
     if (posterPath == null) {
       return 'https://i.stack.imgur.com/GNhxO.png';

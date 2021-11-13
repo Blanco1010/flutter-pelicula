@@ -83,6 +83,7 @@ class _MovieSliderState extends State<MovieSlider> {
               itemBuilder: (BuildContext context, int index) {
                 return _MoviePoster(
                   movie: widget.movies[index],
+                  heroId: '${widget.title}-${index}-${widget.movies[index].id}',
                 );
               },
             ),
@@ -95,11 +96,13 @@ class _MovieSliderState extends State<MovieSlider> {
 
 class _MoviePoster extends StatelessWidget {
   final Movie movie;
+  final String heroId;
 
-  const _MoviePoster({required this.movie});
+  const _MoviePoster({required this.movie, required this.heroId});
 
   @override
   Widget build(BuildContext context) {
+    movie.heroId = heroId;
     final size = MediaQuery.of(context).size;
     return Container(
       width: 130,
@@ -114,13 +117,16 @@ class _MoviePoster extends StatelessWidget {
               await moviesProvider.getColorFromImg(movie.fullBackdropPath);
               Navigator.pushNamed(context, 'details', arguments: movie);
             },
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/img/no-image.jpg'),
-                image: NetworkImage(movie.fullPosterImg),
-                height: size.height * 0.20,
-                fit: BoxFit.cover,
+            child: Hero(
+              tag: movie.heroId!,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: FadeInImage(
+                  placeholder: AssetImage('assets/img/no-image.jpg'),
+                  image: NetworkImage(movie.fullPosterImg),
+                  height: size.height * 0.20,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
