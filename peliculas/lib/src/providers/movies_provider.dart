@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:palette_generator/palette_generator.dart';
+import 'package:peliculas/src/helpers/debouncer.dart';
 import 'package:peliculas/src/models/model.dart';
 import 'package:peliculas/src/models/search_movies_response.dart';
 
@@ -17,6 +20,16 @@ class MoviesProvider with ChangeNotifier {
 
   int _popularPage = 0;
   int _upComingPage = 0;
+
+  final debouncer = Debouncer(
+    duration: Duration(microseconds: 500),
+  );
+
+  final StreamController<List<Movie>> _suggestionStreamController =
+      new StreamController.broadcast();
+
+  Stream<List<Movie>> get suggestionStream =>
+      this._suggestionStreamController.stream;
 
 // When initializing, call some methods
   MoviesProvider() {
@@ -88,6 +101,8 @@ class MoviesProvider with ChangeNotifier {
     final searchResponse = SearchRepsonse.fromJson(response.body);
     return searchResponse.results;
   }
+
+  void getSuggestionByQuery(String searchTerm) {}
 }
 
 class ColorAppBar with ChangeNotifier {

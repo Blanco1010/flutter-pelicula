@@ -37,22 +37,23 @@ class MovieSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     if (query.isEmpty) {
       return SafeArea(child: _emptyContainer());
-    } else {
-      final moviesProvider =
-          Provider.of<MoviesProvider>(context, listen: false);
-
-      return FutureBuilder(
-        future: moviesProvider.searchMovie(query),
-        builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
-          if (!snapshot.hasData) return _emptyContainer();
-
-          final movies = snapshot.data;
-          return ListView.builder(
-              itemCount: movies!.length,
-              itemBuilder: (_, int index) => _MovieItem(movie: movies[index]));
-        },
-      );
     }
+
+    final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
+
+    return FutureBuilder(
+      future: moviesProvider.searchMovie(query),
+      builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
+        if (!snapshot.hasData) return _emptyContainer();
+
+        final movies = snapshot.data;
+        return ListView.builder(
+          physics: BouncingScrollPhysics(),
+          itemCount: movies!.length,
+          itemBuilder: (_, int index) => _MovieItem(movie: movies[index]),
+        );
+      },
+    );
   }
 
   Widget _emptyContainer() {
@@ -71,24 +72,26 @@ class MovieSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     if (query.isEmpty) {
       return SafeArea(child: _emptyContainer());
-    } else {
-      final moviesProvider =
-          Provider.of<MoviesProvider>(context, listen: false);
-
-      return FutureBuilder(
-        future: moviesProvider.searchMovie(query),
-        builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
-          if (!snapshot.hasData) return _emptyContainer();
-
-          final movies = snapshot.data;
-          return ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: movies!.length,
-            itemBuilder: (_, int index) => _MovieItem(movie: movies[index]),
-          );
-        },
-      );
     }
+
+    print('Peticion');
+
+    final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
+
+    return StreamBuilder(
+      // future: moviesProvider.searchMovie(query),
+      stream: moviesProvider.suggestionStream,
+      builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
+        if (!snapshot.hasData) return _emptyContainer();
+
+        final movies = snapshot.data;
+        return ListView.builder(
+          physics: BouncingScrollPhysics(),
+          itemCount: movies!.length,
+          itemBuilder: (_, int index) => _MovieItem(movie: movies[index]),
+        );
+      },
+    );
   }
 }
 
