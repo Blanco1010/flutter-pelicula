@@ -97,12 +97,32 @@ class MoviesProvider with ChangeNotifier {
       'query': query,
     });
 
-    final response = await http.get(url);
-    final searchResponse = SearchRepsonse.fromJson(response.body);
-    return searchResponse.results;
+    try {
+      final response = await http.get(url);
+      final searchResponse = SearchRepsonse.fromJson(response.body);
+      return searchResponse.results;
+    } catch (error) {
+      print(('ERROR: $error'));
+      final List<Movie> list = [];
+      return list;
+    }
   }
 
-  void getSuggestionByQuery(String searchTerm) {}
+  void getSuggestionByQuery(String searchTerm) {
+    debouncer.value = '';
+    debouncer.onValue = (vaule) async {
+      // print('Tenemos valor a buscar: $vaule');
+
+      final results = await this.searchMovie(vaule);
+      this._suggestionStreamController.add(results);
+    };
+
+    final timer = Timer.periodic(Duration(milliseconds: 500), (_) {
+      debouncer.value = searchTerm;
+    });
+
+    Future.delayed(Duration(milliseconds: 501)).then((value) => timer.cancel());
+  }
 }
 
 class ColorAppBar with ChangeNotifier {
